@@ -32,7 +32,7 @@ public class SmsReportHistoryActivity extends AppCompatActivity {
 
     private void saveSmsReportHistory(String reportText, String recognizedText, String chatGPTResponse, int sessionDuration, boolean isUserLoggedIn, String userEmail) {
         if (!isUserLoggedIn || userEmail == null || userEmail.isEmpty()) {
-            Toast.makeText(this, "유저 정보가 없어 저장 실패.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "fail", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
@@ -49,11 +49,11 @@ public class SmsReportHistoryActivity extends AppCompatActivity {
 
         historyRef.setValue(historyData)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "신고내역 저장 성공.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "success.", Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "신고내역 저장 실패.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "fail.", Toast.LENGTH_LONG).show();
                     finish();
                 });
     }
