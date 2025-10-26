@@ -63,7 +63,7 @@ public class RecordingHistoryAdapter extends RecyclerView.Adapter<RecordingHisto
             statusBadge = itemView.findViewById(R.id.status_badge);
             emergencyBadge = itemView.findViewById(R.id.emergency_badge);
 
-            // 클릭 리스너 설정
+         
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (listener != null && position != RecyclerView.NO_POSITION) {
@@ -77,7 +77,7 @@ public class RecordingHistoryAdapter extends RecyclerView.Adapter<RecordingHisto
             durationText.setText(String.format("🎙️ %s", recording.getFormattedDuration()));
             transcriptionText.setText(recording.getShortTranscription());
 
-            // 분석 상태 뱃지 설정
+     
             if (recording.analysis != null && !recording.analysis.isEmpty()) {
                 statusBadge.setText("Analyzed");
                 statusBadge.setBackgroundColor(ContextCompat.getColor(context, android.R.color.holo_green_dark));
@@ -88,7 +88,7 @@ public class RecordingHistoryAdapter extends RecyclerView.Adapter<RecordingHisto
                 statusBadge.setVisibility(View.VISIBLE);
             }
 
-            // 긴급 신고 뱃지 설정
+ 
             if (recording.reportedTo911) {
                 emergencyBadge.setText("🚨 Reported");
                 emergencyBadge.setVisibility(View.VISIBLE);
