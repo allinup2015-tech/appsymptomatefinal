@@ -25,7 +25,7 @@ public class ChatGPT {
     private static final String TAG = "ChatGPT_API";
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    // ⚠️ 보안 개선 권장: 실제 앱에서는 BuildConfig 등을 사용하여 API 키를 관리하세요.
+
     private static final String MY_SECRET_KEY = "MySecertAPIKEy";
 
     private final Context context;
