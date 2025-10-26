@@ -32,11 +32,11 @@ public class SmsReportActivity extends AppCompatActivity {
     private static final String TAG = "SmsReportActivity";
     private static final int SMS_PERMISSION_CODE = 1001;
 
-    // UI Components
+    
     private TextView reportTextView;
     private Button backButton, sendSmsButton, previewButton;
 
-    // Data from previous activity
+ 
     private String reportText;
     private String recognizedText;
     private String chatGPTResponse;
@@ -186,10 +186,10 @@ public class SmsReportActivity extends AppCompatActivity {
                 smsManager.sendTextMessage(phoneNumber, null, text, null, null);
             }
 
-            // After successfully sending, update the database
+           
             updateReportStatusInDB();
 
-            // [수정] LENGTH_LONG_LONG -> LENGTH_LONG 으로 변경
+       
             Toast.makeText(this, "Emergency report sent successfully!", Toast.LENGTH_LONG).show();
 
             new AlertDialog.Builder(this)
