@@ -1,4 +1,4 @@
-// ChatGPT API 호출을 위한 유틸리티 클래스 (액티비티 아님)
+
 package com.example.answer;
 
 import android.content.Context;
@@ -19,10 +19,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * ChatGPT API 호출을 담당하는 헬퍼 클래스
- * 별도 액티비티가 아닌 유틸리티로 작동
- */
+
 public class ChatGPT {
 
     private static final String TAG = "ChatGPT_API";
@@ -35,9 +32,7 @@ public class ChatGPT {
     private final OkHttpClient client;
     private final Handler mainHandler;
 
-    /**
-     * API 응답 콜백 인터페이스
-     */
+ 
     public interface ChatGPTCallback {
         void onSuccess(String response);
         void onError(String error);
@@ -53,15 +48,10 @@ public class ChatGPT {
                 .build();
     }
 
-    /**
-     * ChatGPT API 호출 메서드
-     * @param question STT로부터 받은 텍스트
-     * @param callback 결과 콜백
-     */
+   
     public void callAPI(String question, ChatGPTCallback callback) {
         Log.d(TAG, "Calling ChatGPT API with question: " + question);
 
-        // ✅ 추가: null 체크
         if (callback == null) {
             Log.e(TAG, "Callback is null");
             return;
@@ -73,14 +63,13 @@ public class ChatGPT {
             return;
         }
 
-        // API 키 검증
+        
         if (MY_SECRET_KEY == null || MY_SECRET_KEY.equals("YOUR_OPENAI_API_KEY") || MY_SECRET_KEY.isEmpty()) {
             Log.e(TAG, "API Key is missing.");
             mainHandler.post(() -> callback.onError("API key is not set. Please check your configuration."));
             return;
         }
 
-        // 의료 증상 분석을 위한 시스템 프롬프트
         String systemPrompt = "You are a medical symptom analysis AI assistant. Analyze the patient's symptoms and provide a structured assessment.\n\n" +
                 "📋 ANALYSIS FORMAT (Respond in English):\n\n" +
                 "👤 PATIENT INFORMATION\n" +
@@ -131,7 +120,7 @@ public class ChatGPT {
                     .post(body)
                     .build();
 
-            // 비동기 API 호출
+    
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -196,9 +185,7 @@ public class ChatGPT {
         }
     }
 
-    /**
-     * HTTP 에러 처리
-     */
+ 
     private String handleHttpError(int responseCode, String responseBody) {
         String errorMessage;
         try {
@@ -214,10 +201,7 @@ public class ChatGPT {
         return "Error: " + errorMessage;
     }
 
-    /**
-     * 리소스 정리 (수정된 부분)
-     * NetworkOnMainThreadException을 방지하기 위해 백그라운드 스레드에서 리소스를 정리합니다.
-     */
+
     public void cleanup() {
         new Thread(() -> {
             try {
