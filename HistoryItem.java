@@ -10,7 +10,7 @@ public class HistoryItem {
 
 
 
-    public HistoryItem() {} // Firebase 기본 생성자 필요
+    public HistoryItem() {} 
 
     public String getDateFormatted() {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
