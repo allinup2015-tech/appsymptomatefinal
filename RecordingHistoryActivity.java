@@ -38,7 +38,7 @@ public class RecordingHistoryActivity extends AppCompatActivity implements Navig
 
     private static final String TAG = "RecordingHistory";
 
-    // UI Components
+
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
@@ -49,11 +49,11 @@ public class RecordingHistoryActivity extends AppCompatActivity implements Navig
     private RecordingHistoryAdapter adapter;
     private List<RecordingItem> recordingsList;
 
-    // User State
+ 
     private String userEmail;
     private String userName;
 
-    // Firebase
+
     private FirebaseAuth mAuth;
     private DatabaseReference userRecordingsRef;
     private ValueEventListener recordingsListener;
@@ -220,7 +220,7 @@ public class RecordingHistoryActivity extends AppCompatActivity implements Navig
 
 
     private void showRecordingDetails(RecordingItem recording) {
-        // [참고] 추후 '녹음 듣기' 기능은 이곳에 'recording.audioUrl'을 사용하여 구현할 수 있습니다.
+      
         String details = "Date: " + recording.getFormattedDate() + "\n" +
                 "Duration: " + recording.getFormattedDuration() + "\n\n" +
                 "Transcription:\n" + (recording.transcription != null ? recording.transcription : "N/A") + "\n\n" +
@@ -248,7 +248,7 @@ public class RecordingHistoryActivity extends AppCompatActivity implements Navig
             Toast.makeText(this, "Cannot delete item: Invalid ID.", Toast.LENGTH_SHORT).show();
             return;
         }
-        // [참고] 데이터베이스 항목 삭제 시, Storage에 있는 오디오 파일도 함께 삭제하는 로직 추가 필요
+ 
         userRecordingsRef.child(recording.id).removeValue()
                 .addOnSuccessListener(aVoid -> Toast.makeText(this, "Recording deleted.", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to delete recording.", Toast.LENGTH_SHORT).show());
@@ -280,7 +280,7 @@ public class RecordingHistoryActivity extends AppCompatActivity implements Navig
         return super.onOptionsItemSelected(item);
     }
 
-    // [수정] RecordingItem 클래스
+
     public static class RecordingItem {
         public String id;
         public Long timestamp;
@@ -288,13 +288,13 @@ public class RecordingHistoryActivity extends AppCompatActivity implements Navig
         public String transcription;
         public String analysis;
         public boolean reportedTo911;
-        public String audioUrl; // [추가] 오디오 파일의 다운로드 URL을 저장할 필드
+        public String audioUrl; 
 
         public RecordingItem() {
-            // Firebase Deserialization을 위한 필수 생성자
+          
         }
 
-        // [수정] Main_Page에서 사용할 생성자
+
         public RecordingItem(Long timestamp, Long duration, String transcription, String analysis, boolean reportedTo911, String audioUrl) {
             this.timestamp = timestamp;
             this.duration = duration;
