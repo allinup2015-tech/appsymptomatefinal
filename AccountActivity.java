@@ -21,21 +21,18 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * 계정 설정 화면 (사이드바 포함)
- * 로그인한 사용자의 계정 정보 및 설정 옵션
- */
+
 public class AccountActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "AccountActivity";
 
-    /* NavigationDrawer */
+ 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
 
-    /* UI Components */
+  
     private TextView userNameTextView;
     private TextView userEmailTextView;
     private TextView accountStatusTextView;
@@ -44,10 +41,10 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
     private Button recordingHistoryButton;
     private Button privacySettingsButton;
 
-    /* User State */
+    
     private String userEmail;
     private String userName;
-    private boolean isUserLoggedIn = true; // 이 화면은 로그인 필요
+    private boolean isUserLoggedIn = true; 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -56,11 +53,11 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        // Firebase 초기화
+      
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // 사용자 정보 가져오기
+    
         userEmail = getIntent().getStringExtra("user_email");
         userName = getIntent().getStringExtra("user_name");
 
@@ -81,12 +78,12 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
 
     private void initNavigationDrawer() {
         try {
-            // NavigationDrawer 컴포넌트 찾기
+       
             drawerLayout = findViewById(R.id.drawer_layout);
             navigationView = findViewById(R.id.nav_view);
             toolbar = findViewById(R.id.toolbar);
 
-            // 툴바 설정
+        
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -94,7 +91,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 getSupportActionBar().setTitle("Account Settings");
             }
 
-            // DrawerToggle 설정
+       
             toggle = new ActionBarDrawerToggle(
                     this, drawerLayout, toolbar,
                     R.string.navigation_drawer_open,
@@ -105,7 +102,6 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
             toggle.syncState();
             navigationView.setNavigationItemSelectedListener(this);
 
-            // NavigationView 헤더 업데이트
             updateNavigationHeader();
 
         } catch (Exception e) {
@@ -124,7 +120,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
             if (emailTextView != null) emailTextView.setText(userEmail);
             if (statusTextView != null) statusTextView.setText("Signed in");
 
-            // 메뉴 가시성 업데이트
+         
             MenuItem signInItem = navigationView.getMenu().findItem(R.id.nav_sign_in);
             MenuItem signOutItem = navigationView.getMenu().findItem(R.id.nav_sign_out);
             MenuItem accountItem = navigationView.getMenu().findItem(R.id.nav_account);
@@ -217,7 +213,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         recordingHistoryButton = findViewById(R.id.recording_history_button);
         privacySettingsButton = findViewById(R.id.privacy_settings_button);
 
-        // 버튼 리스너 설정
+     
         if (signOutButton != null) {
             signOutButton.setOnClickListener(v -> showSignOutDialog());
         }
@@ -252,7 +248,6 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
             mAuth.signOut();
             Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show();
 
-            // 로그인 화면으로 이동
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -286,7 +281,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
     }
 
     private void deleteAccount() {
-        // TODO: 실제 계정 삭제 구현
+  
         Toast.makeText(this, "Account deletion feature coming soon", Toast.LENGTH_LONG).show();
     }
 
