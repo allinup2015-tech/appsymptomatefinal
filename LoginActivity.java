@@ -22,16 +22,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-/**
- * 간결한 로그인 화면 - ChatGPT 스타일
- * 빠른 로그인으로 저장 기능 활성화
- */
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    /* UI Components */
+  
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button signInButton;
@@ -39,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView skipButton;
     private TextView signUpText;
 
-    /* Firebase */
+
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -48,10 +44,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Firebase Auth 초기화
+
         mAuth = FirebaseAuth.getInstance();
 
-        // Google Sign-In 설정
+ 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.project_id))
                 .requestEmail()
@@ -74,22 +70,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // 이메일 로그인
+   
         signInButton.setOnClickListener(this::signInWithEmail);
 
-        // Google 로그인
+    
         googleSignInButton.setOnClickListener(this::signInWithGoogle);
 
-        // 건너뛰기 (게스트 모드)
+     
         skipButton.setOnClickListener(this::skipLogin);
 
-        // 회원가입
+    
         signUpText.setOnClickListener(this::showSignUp);
     }
 
-    /**
-     * 이메일 로그인
-     */
+ 
     private void signInWithEmail(View view) {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
@@ -115,17 +109,12 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Google 로그인
-     */
     private void signInWithGoogle(View view) {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    /**
-     * 로그인 건너뛰기 (게스트 모드)
-     */
+    
     private void skipLogin(View view) {
         Log.d(TAG, "User chose to continue without login (guest mode)");
         Toast.makeText(this, "Guest mode: Recording works, but history requires login",
@@ -133,9 +122,6 @@ public class LoginActivity extends AppCompatActivity {
         proceedToMain(null); // null = 게스트 모드
     }
 
-    /**
-     * 회원가입 다이얼로그 (간단한 구현)
-     */
     private void showSignUp(View view) {
         // 간단한 회원가입 - 이메일과 비밀번호만
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
@@ -173,9 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
-    /**
-     * 계정 생성
-     */
+    
     private void createAccount(String email, String password) {
         setLoading(true);
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -226,9 +210,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * 메인 화면으로 이동
-     */
     private void proceedToMain(FirebaseUser user) {
         Intent intent = new Intent(this, MainActivity.class);
         if (user != null) {
@@ -244,9 +225,6 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    /**
-     * 로딩 상태 UI 업데이트
-     */
     private void setLoading(boolean isLoading) {
         signInButton.setEnabled(!isLoading);
         googleSignInButton.setEnabled(!isLoading);
