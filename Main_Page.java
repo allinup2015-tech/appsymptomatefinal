@@ -48,10 +48,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * Symptomate Main Recording Activity - ChatGPT.callAPI() 메서드 사용 버전
- * NavigationDrawer + 실제 녹음 + ChatGPT + Firebase 모든 기능 포함
- */
 public class Main_Page extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "SYMPTOMATE_MAIN";
@@ -59,27 +55,27 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
     private static final String API_KEY = "AIzaSyBcBfDPvC91CC190h5P82nNNCY0UUurllE";
     private static final String API_URL = "https://speech.googleapis.com/v1/speech:recognize?key=" + API_KEY;
 
-    /* Audio Settings */
+
     private static final int SAMPLE_RATE = 16000;
     private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private static final int BUFFER_SIZE_MULTIPLIER = 4;
     private static final int MAX_RECORDING_TIME_MS = 60_000;
 
-    /* NavigationDrawer */
+
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
 
-    /* Audio Objects */
+
     private AudioRecord audioRecord;
     private volatile boolean isRecording = false;
     private Thread recordingThread;
     private ByteArrayOutputStream audioBuffer;
     private int bufferSize;
 
-    /* UI Components */
+
     private TextView sttResultTextView;
     private TextView recordingStatusPrimary;
     private TextView recordingStatusSecondary;
@@ -92,19 +88,19 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
     private View[] waveBars;
     private TextView userStatusIndicator;
 
-    /* Background Task Management */
+
     private ExecutorService executorService;
     private Handler mainHandler;
     private Handler timerHandler;
     private Runnable timerRunnable;
     private int secondsElapsed = 0;
 
-    /* Recording State */
+
     private String recognizedText = "";
     private String chatGPTResponse = "";
     private ChatGPT chatGPTHelper;
 
-    /* User State */
+
     private boolean isUserLoggedIn = false;
     private String userEmail = "";
     private String userName = "";
@@ -121,33 +117,33 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
             setContentView(R.layout.activity_mainpage1);
             Log.d(TAG, "Layout set successfully");
 
-            // Firebase 초기화
+    
             mAuth = FirebaseAuth.getInstance();
             db = FirebaseFirestore.getInstance();
 
-            // 백그라운드 작업 초기화
+ 
             executorService = Executors.newSingleThreadExecutor();
             mainHandler = new Handler(Looper.getMainLooper());
             timerHandler = new Handler(Looper.getMainLooper());
             audioBuffer = new ByteArrayOutputStream();
 
-            // ✅ ChatGPT 헬퍼 초기화 (수정된 부분)
+
             chatGPTHelper = new ChatGPT(this);
             Log.d(TAG, "ChatGPT helper initialized");
 
-            // 사용자 상태 로드
+      
             loadUserState();
 
-            // NavigationDrawer 초기화 (안전하게)
+      
             initNavigationDrawer();
 
-            // 권한 확인
+         
             if (!checkAndRequestPermissions()) {
                 Log.w(TAG, "Permissions not granted yet");
                 return;
             }
 
-            // UI 및 기능 초기화
+       
             initializeApp();
 
             Log.d(TAG, "=== Main_page onCreate SUCCESS ===");
@@ -169,7 +165,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
             if (userEmail == null) userEmail = "";
             if (userName == null) userName = "";
 
-            // Firebase 자동 로그인 확인
+   
             FirebaseUser currentUser = mAuth.getCurrentUser();
             if (currentUser != null && !isUserLoggedIn) {
                 isUserLoggedIn = true;
@@ -192,13 +188,13 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
 
     private void initNavigationDrawer() {
         try {
-            // NavigationDrawer 컴포넌트 찾기 (옵션)
+          
             drawerLayout = findViewById(R.id.drawer_layout);
             navigationView = findViewById(R.id.nav_view);
             toolbar = findViewById(R.id.toolbar);
 
             if (drawerLayout != null && navigationView != null && toolbar != null) {
-                // 툴바 설정
+             
                 setSupportActionBar(toolbar);
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -206,7 +202,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                     getSupportActionBar().setTitle("Voice Analysis");
                 }
 
-                // DrawerToggle 설정
+             
                 toggle = new ActionBarDrawerToggle(
                         this, drawerLayout, toolbar,
                         R.string.navigation_drawer_open,
@@ -217,7 +213,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                 toggle.syncState();
                 navigationView.setNavigationItemSelectedListener(this);
 
-                // NavigationView 헤더 업데이트
+            
                 updateNavigationHeader();
 
                 Log.d(TAG, "NavigationDrawer initialized successfully");
@@ -301,7 +297,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
 
         try {
             if (id == R.id.nav_new_recording) {
-                // 현재 화면이므로 아무것도 하지 않음
+   
                 Toast.makeText(this, "Already on recording screen", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.nav_recording_history) {
                 if (checkLoginRequired("view your recording history")) {
@@ -421,7 +417,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         Log.d(TAG, "Initializing views...");
 
         try {
-            // UI 컴포넌트들 찾기
+  
             microphoneIcon = findViewById(R.id.microphone_icon);
             microphoneShadow = findViewById(R.id.microphone_shadow);
             recordingStatusPrimary = findViewById(R.id.recording_status_primary);
@@ -433,10 +429,10 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
             stopBtn = findViewById(R.id.stop_analyze_btn);
             userStatusIndicator = findViewById(R.id.user_status_indicator);
 
-            // 웨이브 바들 (옵션)
+       
             initWaveBars();
 
-            // 버튼 리스너 설정
+    
             setButtonListeners();
 
             Log.d(TAG, "Views initialized successfully");
@@ -603,7 +599,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
-    /* 애니메이션 메서드들 - PNG 파일 사용 */
+
     private void setMicIdle() {
         if (microphoneIcon != null) {
             microphoneIcon.clearAnimation();
@@ -621,8 +617,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
 
     private void setMicRecording() {
         if (microphoneIcon != null) {
-            try {
-                // voice.png (빨간색) 사용
+    
                 microphoneIcon.setImageResource(R.drawable.voice);
                 microphoneIcon.clearAnimation();
 
@@ -673,7 +668,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
-    /* 타이머 관리 */
+
     private void initTimer() {
         timerRunnable = new Runnable() {
             @Override
@@ -706,7 +701,6 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         if (timerHandler != null) timerHandler.removeCallbacks(timerRunnable);
     }
 
-    /* 버튼 이벤트 핸들러 - 실제 기능 복원 */
     private void onStartClick(View v) {
         Log.d(TAG, "Start button clicked - isRecording: " + isRecording);
         try {
@@ -784,7 +778,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
-    /* 권한 관리 */
+
     private boolean checkAndRequestPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String[] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.INTERNET};
@@ -833,7 +827,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
-    /* AudioRecord 관리 - 실제 녹음 기능 */
+   
     private void initAudioRecord() {
         try {
             int minBufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT);
@@ -882,7 +876,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                             audioBuffer.write(buffer, 0, bytesRead);
                         }
 
-                        // 최대 녹음 시간 체크
+                       
                         if (audioBuffer.size() >= SAMPLE_RATE * 2 * (MAX_RECORDING_TIME_MS / 1000)) {
                             Log.d(TAG, "Maximum recording time reached");
                             break;
@@ -948,7 +942,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
-    // ✅ 완전히 수정된 Google STT 메서드 - 영어 우선 + JSON 에러 해결
+  
     private void processWithGoogleSTT(byte[] audioData) {
         if (executorService == null) {
             Log.e(TAG, "Executor service is null");
@@ -959,7 +953,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
             try {
                 Log.d(TAG, "Processing audio with Google STT (English optimized)...");
 
-                // 오디오 데이터 검증
+        
                 if (audioData == null || audioData.length == 0) {
                     Log.w(TAG, "No audio data to process");
                     mainHandler.post(() -> {
@@ -971,7 +965,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                     return;
                 }
 
-                // 오디오 길이 확인 (최소 1초 이상)
+           
                 int minBytes = SAMPLE_RATE * 2; // 16-bit = 2 bytes per sample
                 if (audioData.length < minBytes) {
                     Log.w(TAG, "Audio too short: " + audioData.length + " bytes");
@@ -984,23 +978,23 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                     return;
                 }
 
-                // Base64 인코딩
+             
                 String base64Audio = Base64.encodeToString(audioData, Base64.NO_WRAP);
                 Log.d(TAG, "Audio encoded to base64, length: " + base64Audio.length());
 
-                // ✅ JSON 구문 에러 해결 - 단계별 생성
+          
                 JSONObject audioObject = new JSONObject();
                 audioObject.put("content", base64Audio);
 
-                // ✅ 영어 우선 STT 설정
+ 
                 JSONArray alternativeLanguages = new JSONArray();
-                alternativeLanguages.put("ko-KR");  // 한국어를 대체 언어로
-                alternativeLanguages.put("ja-JP");  // 일본어도 지원
+                alternativeLanguages.put("ko-KR");  
+                alternativeLanguages.put("ja-JP"); 
 
                 JSONObject config = new JSONObject();
                 config.put("encoding", "LINEAR16");
                 config.put("sampleRateHertz", SAMPLE_RATE);
-                config.put("languageCode", "en-US");  // ✅ 영어 우선으로 변경
+                config.put("languageCode", "en-US"); 
                 config.put("alternativeLanguageCodes", alternativeLanguages);
                 config.put("maxAlternatives", 5);
                 config.put("enableAutomaticPunctuation", true);
@@ -1010,14 +1004,14 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                 config.put("enableSpokenPunctuation", true);
                 config.put("model", "latest_long");
 
-                // ✅ 최종 요청 JSON 생성
+              
                 JSONObject requestJson = new JSONObject();
                 requestJson.put("audio", audioObject);
                 requestJson.put("config", config);
 
                 Log.d(TAG, "STT Request prepared successfully");
 
-                // API 호출
+            
                 URL url = new URL(API_URL);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
@@ -1027,7 +1021,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                 connection.setReadTimeout(30000);     // 30초 읽기 타임아웃
                 connection.setDoOutput(true);
 
-                // 요청 전송
+           
                 try (OutputStream os = connection.getOutputStream()) {
                     byte[] input = requestJson.toString().getBytes("utf-8");
                     os.write(input, 0, input.length);
@@ -1037,7 +1031,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                 int responseCode = connection.getResponseCode();
                 Log.d(TAG, "Google STT response code: " + responseCode);
 
-                // 응답 읽기
+    
                 BufferedReader reader;
                 if (responseCode >= 200 && responseCode < 300) {
                     reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
@@ -1057,7 +1051,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                 Log.d(TAG, "STT Response: " + responseStr);
 
                 if (responseCode >= 200 && responseCode < 300) {
-                    // 성공 응답 처리
+                   
                     JSONObject responseJson = new JSONObject(responseStr);
 
                     if (responseJson.has("results")) {
@@ -1071,11 +1065,11 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                                 JSONObject bestAlternative = alternatives.getJSONObject(0);
                                 recognizedText = bestAlternative.getString("transcript");
 
-                                // 신뢰도 확인
+                            
                                 double confidence = bestAlternative.optDouble("confidence", 0.0);
                                 Log.d(TAG, "Recognized text (English): '" + recognizedText + "' (confidence: " + confidence + ")");
 
-                                // 텍스트 후처리
+                              
                                 recognizedText = recognizedText.trim();
                                 if (recognizedText.isEmpty()) {
                                     throw new Exception("Empty recognition result");
@@ -1098,18 +1092,18 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                                     safeUpdateTextView(sttResultTextView, displayText, android.R.color.black);
                                 });
 
-                                // ChatGPT API 호출
+                          
                                 callChatGPTAPI(recognizedText);
                                 return;
                             }
                         }
                     }
 
-                    // 결과가 없는 경우
+          
                     throw new Exception("No speech recognized in audio");
 
                 } else {
-                    // HTTP 에러
+              
                     throw new Exception("STT API error (HTTP " + responseCode + "): " + responseStr);
                 }
 
@@ -1146,16 +1140,13 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         });
     }
 
-    // ✅ 수정된 ChatGPT API 호출 메서드
+
     private void callChatGPTAPI(String userText) {
         try {
             if (chatGPTHelper == null) {
                 Log.w(TAG, "ChatGPT helper is null, showing text only");
                 mainHandler.post(() -> {
-                    String displayText = "🎙️ 인식된 음성:\n" + userText +
-                            "\n\n❗ AI 분석을 사용할 수 없습니다.\n응급 상황이라면 119에 즉시 신고하세요." +
-                            "\n\n" + (isUserLoggedIn ? "✅ 음성 기록이 저장되었습니다." :
-                            "ℹ️ 게스트 모드: 음성 기록이 저장되지 않습니다.");
+                
                     safeUpdateTextView(sttResultTextView, displayText, android.R.color.black);
                     updateUI(UIState.COMPLETED);
 
@@ -1166,26 +1157,20 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                 return;
             }
 
-            String prompt = "다음은 의료 증상에 대한 음성 인식 결과입니다. 전문적이고 신뢰할 수 있는 의료 분석을 제공해주세요:\n\n" + userText +
-                    "\n\n분석 내용:\n1. 주요 증상 요약\n2. 가능한 원인들\n3. 응급도 평가 (1-10)\n4. 권장 조치사항\n\n" +
-                    "중요: 이는 전문의 진단을 대체할 수 없으며, 응급 상황 시 즉시 119에 신고하세요.";
+        
 
-            // ✅ 수정된 부분: getChatGPTResponse → callAPI 사용
+      
             chatGPTHelper.callAPI(prompt, new ChatGPT.ChatGPTCallback() {
                 @Override
                 public void onSuccess(String response) {
                     chatGPTResponse = response;
 
-                    mainHandler.post(() -> {
-                        String displayText = "🎙️ 인식된 음성:\n" + userText +
-                                "\n\n🤖 AI 의료 분석:\n" + response +
-                                "\n\n" + (isUserLoggedIn ? "✅ 분석 결과가 저장되었습니다." :
-                                "ℹ️ 게스트 모드: 분석 결과가 저장되지 않습니다.");
+
 
                         safeUpdateTextView(sttResultTextView, displayText, android.R.color.black);
                         updateUI(UIState.COMPLETED);
 
-                        // Firebase에 저장 (로그인된 경우만)
+                  
                         if (isUserLoggedIn) {
                             saveRecordingToFirestore();
                         }
@@ -1198,11 +1183,6 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
                 public void onError(String error) {
                     Log.e(TAG, "ChatGPT error: " + error);
                     mainHandler.post(() -> {
-                        String displayText = "🎙️ 인식된 음성:\n" + userText +
-                                "\n\n❌ AI 분석 중 오류가 발생했습니다: " + error +
-                                "\n\n그래도 응급 상황이라면 119에 신고하세요." +
-                                "\n\n" + (isUserLoggedIn ? "✅ 음성 기록이 저장되었습니다." :
-                                "ℹ️ 게스트 모드: 음성 기록이 저장되지 않습니다.");
 
                         safeUpdateTextView(sttResultTextView, displayText, android.R.color.black);
                         updateUI(UIState.COMPLETED);
@@ -1217,10 +1197,7 @@ public class Main_Page extends AppCompatActivity implements NavigationView.OnNav
         } catch (Exception e) {
             Log.e(TAG, "Error calling ChatGPT API: " + e.getMessage(), e);
             mainHandler.post(() -> {
-                String displayText = "🎙️ 인식된 음성:\n" + userText +
-                        "\n\n❌ AI 분석을 사용할 수 없습니다.\n응급 상황이라면 119에 즉시 신고하세요." +
-                        "\n\n" + (isUserLoggedIn ? "✅ 음성 기록이 저장되었습니다." :
-                        "ℹ️ 게스트 모드: 음성 기록이 저장되지 않습니다.");
+                String displayText = "🎙️ recording.");
                 safeUpdateTextView(sttResultTextView, displayText, android.R.color.black);
                 updateUI(UIState.COMPLETED);
 
