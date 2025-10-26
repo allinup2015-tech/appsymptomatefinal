@@ -13,14 +13,14 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 백그라운드 스레드에서 지연 실행
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(3000); // 3초 대기
+                    Thread.sleep(3000); 
 
-                    // UI 스레드에서 액티비티 전환
+                   
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
