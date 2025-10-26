@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <!-- Main features group -->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_new_recording"
+            android:icon="@drawable/ic_microphone"
+            android:title="@string/nav_new_recording" />
+        <item
+            android:id="@+id/nav_recording_history"
+            android:title="@string/nav_recording_history" />
+        <item
+            android:id="@+id/nav_emergency_reports"
+            android:icon="@drawable/ic_emergency"
+            android:title="@string/nav_emergency_reports" />
+    </group>
+
+    <!-- Account management group -->
+    <item android:title="@string/nav_account_section">
+        <menu>
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/ic_account"
+                android:title="@string/nav_account" />
+            <item
+                android:id="@+id/nav_sign_in"
+                android:icon="@drawable/ic_sign_in"
+                android:title="@string/nav_sign_in" />
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@drawable/ic_sign_out"
+                android:title="@string/nav_sign_out" />
+        </menu>
+    </item>
+
+    <!-- Support group -->
+    <item android:title="@string/nav_support_section">
+        <menu>
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help"
+                android:title="@string/nav_help" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info"
+                android:title="@string/nav_about" />
+        </menu>
+    </item>
+
+</menu>

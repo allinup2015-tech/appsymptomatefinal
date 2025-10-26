@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- 메인 콘텐츠 -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 앱바 -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.Answer.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/Theme.Answer.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- 메인 스크롤 콘텐츠 -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#6366F1">
+
+                <!-- 상단 상태 바 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:background="#80FFFFFF">
+
+                    <!-- 연결 상태 -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="●"
+                            android:textSize="12sp"
+                            android:textColor="#22C55E"
+                            android:layout_marginEnd="4dp" />
+
+                        <TextView
+                            android:id="@+id/connection_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Connected"
+                            android:textSize="12sp"
+                            android:textColor="@android:color/white"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- 세션 타이머 -->
+                    <TextView
+                        android:id="@+id/session_timer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:background="@drawable/timer_badge_bg"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp" />
+
+                </LinearLayout>
+
+                <!-- 메인 녹음 영역 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="32dp">
+
+                    <!-- 상태 텍스트 -->
+                    <TextView
+                        android:id="@+id/recording_status_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ready to Record"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/recording_status_secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Press microphone to start"
+                        android:textSize="14sp"
+                        android:textColor="#E0FFFFFF"
+                        android:layout_marginBottom="32dp" />
+
+                    <!-- 마이크 버튼과 애니메이션 -->
+                    <RelativeLayout
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:layout_marginBottom="24dp">
+
+                        <!-- 마이크 그림자 -->
+                        <ImageView
+                            android:id="@+id/microphone_shadow"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/mic_shadow"
+                            android:alpha="0.3" />
+
+                        <!-- 메인 마이크 아이콘 -->
+                        <ImageView
+                            android:id="@+id/microphone_icon"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/voice__1_"
+                            android:background="@drawable/mic_button_background"
+                            android:padding="20dp"
+                            android:elevation="8dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:contentDescription="Microphone Button" />
+
+                    </RelativeLayout>
+
+                    <!-- 오디오 웨이브 바 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:gravity="bottom"
+                        android:layout_marginBottom="24dp">
+
+                        <View
+                            android:id="@+id/wave_bar_1"
+                            android:layout_width="4dp"
+                            android:layout_height="12dp"
+                            android:layout_margin="2dp"
+                            android:background="#4F46E5"
+                            android:alpha="0.6" />
+
+                        <View
+                            android:id="@+id/wave_bar_2"
+                            android:layout_width="4dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="2dp"
+                            android:background="#4F46E5"
+                            android:alpha="0.7" />
+
+                        <View
+                            android:id="@+id/wave_bar_3"
+                            android:layout_width="4dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="2dp"
+                            android:background="#4F46E5"
+                            android:alpha="0.8" />
+
+                        <View
+                            android:id="@+id/wave_bar_4"
+                            android:layout_width="4dp"
+                            android:layout_height="48dp"
+                            android:layout_margin="2dp"
+                            android:background="#4F46E5"
+                            android:alpha="1.0" />
+
+                        <View
+                            android:id="@+id/wave_bar_5"
+                            android:layout_width="4dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="2dp"
+                            android:background="#4F46E5"
+                            android:alpha="0.8" />
+
+                        <View
+                            android:id="@+id/wave_bar_6"
+                            android:layout_width="4dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="2dp"
+                            android:background="#4F46E5"
+                            android:alpha="0.7" />
+
+                        <View
+                            android:id="@+id/wave_bar_7"
+                            android:layout_width="4dp"
+                            android:layout_height="12dp"
+                            android:layout_margin="2dp"
+                            android:background="#4F46E5"
+                            android:alpha="0.6" />
+
+                    </LinearLayout>
+
+                    <!-- 제어 버튼들 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginBottom="24dp">
+
+                        <Button
+                            android:id="@+id/start_btn"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_margin="8dp"
+                            android:text="🎙️ Start Recording"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/button_background"
+                            android:textColor="@android:color/white"
+                            android:elevation="4dp" />
+
+                        <Button
+                            android:id="@+id/stop_analyze_btn"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_margin="8dp"
+                            android:text="⏹️ Stop Analysis"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/button_background_red"
+                            android:textColor="@android:color/white"
+                            android:elevation="4dp"
+                            android:enabled="false" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- 사용자 상태 표시 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:background="#80FFFFFF"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/user_status_indicator"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="👤 Guest Mode - Sign in to save recordings"
+                        android:textSize="12sp"
+                        android:textColor="#E0FFFFFF" />
+
+                </LinearLayout>
+
+                <!-- 결과 표시 카드 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="📋 Analysis Results"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"
+                            android:layout_marginBottom="12dp" />
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:background="#F9FAFB"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/stt_result_textview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Press the microphone to start voice analysis.\n\nYour recordings will be saved to your account."
+                                android:textSize="14sp"
+                                android:lineSpacingExtra="4dp"
+                                android:textColor="@android:color/black" />
+
+                        </ScrollView>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- NavigationView (사이드바) -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
