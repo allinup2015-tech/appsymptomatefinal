@@ -19,25 +19,21 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * NavigationDrawer 구조의 메인 액티비티
- * 로그인 상태에 따라 기능 제한/활성화
- */
 public class MainActivity1 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
 
-    /* UI Components */
+
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
 
-    /* User State */
+
     private boolean isUserLoggedIn = false;
     private String userEmail = "";
     private String userName = "";
 
-    /* Firebase */
+
     private FirebaseAuth mAuth;
 
     @Override
@@ -52,10 +48,9 @@ public class MainActivity1 extends AppCompatActivity implements NavigationView.O
         loadUserState();
         updateNavigationHeader();
 
-        // 기본으로 녹음 화면 표시
         if (savedInstanceState == null) {
-            // 앱 시작 시 첫 화면 로드는 여기서 관리합니다.
-            // loadRecordingFragment(); // 필요 시 주석 해제
+
+          
         }
 
         Log.d(TAG, "MainActivity initialized - User logged in: " + isUserLoggedIn);
@@ -78,9 +73,7 @@ public class MainActivity1 extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    /**
-     * 사용자 상태 로드 (Intent 또는 Firebase에서)
-     */
+  
     private void loadUserState() {
         Intent intent = getIntent();
         isUserLoggedIn = intent.getBooleanExtra("user_logged_in", false);
@@ -107,9 +100,7 @@ public class MainActivity1 extends AppCompatActivity implements NavigationView.O
         Log.d(TAG, "User state loaded - Email: " + userEmail + ", Name: " + userName);
     }
 
-    /**
-     * NavigationDrawer 헤더 업데이트
-     */
+ 
     private void updateNavigationHeader() {
         View headerView = navigationView.getHeaderView(0);
         TextView nameTextView = headerView.findViewById(R.id.nav_user_name);
@@ -167,9 +158,7 @@ public class MainActivity1 extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-    /**
-     * 녹음 화면 로드
-     */
+  
     private void loadRecordingFragment() {
         // Main_Page가 별도의 Activity이므로 Intent로 시작합니다.
         Intent intent = new Intent(this, Main_Page.class);
