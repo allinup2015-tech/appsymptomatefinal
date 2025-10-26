@@ -31,7 +31,7 @@ public class HistoryListActivity extends AppCompatActivity {
     private void loadDataFromFirebase() {
         String userEmail = getIntent().getStringExtra("user_email");
         if (userEmail == null) {
-            Toast.makeText(this, "로그인 정보가 필요합니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "need login info.", Toast.LENGTH_SHORT).show();
             return;
         }
         String encodedEmail = userEmail.replace(".", ",");
